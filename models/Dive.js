@@ -1,7 +1,8 @@
 const db = require('../config/connection');
 
 /* Create a dive class with a getLatest method to query the db
- and return the lastest entry (it will return a Promise object first) */
+ and return the lastest entry (it will return a Promise object first because
+ that's how the pg module works) */
 class Dive {
   getLatest() {
     return db.query(`SELECT * FROM dives ORDER BY dive_date DESC LIMIT 100`);
