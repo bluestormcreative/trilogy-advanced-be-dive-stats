@@ -26,3 +26,5 @@ router.get('/:id/stats', async (req, res) => {
     res.status(404).end();
   }
 });
+
+module.exports = router;

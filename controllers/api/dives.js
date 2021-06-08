@@ -5,7 +5,7 @@ const { Dive } = require('../../models');
  endpoint for the getLatest query.
  Using async/await here means we don't need to 
  write the returned Promise as a nested callback. 
- Note the route is '/' */
+ Note the route is '/' which means the /dives endpoint*/
 router.get('/', async (req, res) => {
   const { rows } = await Dive.getLatest();
   res.json(rows);
