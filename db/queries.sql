@@ -17,7 +17,8 @@ WHERE dive_date > NOW() - INTERVAL
 GROUP BY month
 ORDER BY dive_count DESC LIMIT 1;
 
-/* query a diver's deepest dive */
+/* query the single deepest dive from a location, using a subquery */
+/* concat the diver name and then call that field diver_name */
 SELECT CONCAT(divers.first_name, ' ', divers.last_name) AS diver_name, dives.depth
 FROM dives
   LEFT JOIN divers ON dives.diver_id = divers.id
@@ -26,3 +27,31 @@ WHERE dives.depth = (
 FROM dives
 WHERE location_id = 1
 );
+
+/* query all the diver certification levels */
+/* make sure each diver record we get is unique using DISTINCT */
+/* we could also use GROUP BY here to get distinct entries */
+SELECT DISTINCT dives.diver_id, certifications.name
+from dives
+  LEFT JOIN divers ON dives.diver_id = divers.id
+  LEFT JOIN certifications ON divers.certification_id = certifications.id;
+
+
+/* same query as above but using a CTE (common table expression) */
+/* this query finds the most prevalent certification at a given dive loation */
+WITH
+  certs
+  AS
+  (
+    SELECT DISTINCT dives.diver_id, certifications.name
+    from dives
+      LEFT JOIN divers ON dives.diver_id = divers.id
+      LEFT JOIN certifications ON divers.certification_id = certifications.id
+    WHERE dives.location_id = 1
+    GROUP BY dives.diver_id, certifications.name
+  )
+SELECT name
+FROM certs
+GROUP BY name
+ORDER BY COUNT(name) DESC
+LIMIT 1;
